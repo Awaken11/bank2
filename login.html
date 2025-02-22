@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Black Bank</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Black Bank</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.html">About Us</a></li>
+            </ul>
+        </nav>
+        <a href="login.html" class="login-btn">Login</a>
+    </header>
+    <main>
+        <section class="login">
+            <h2>Login to Your Account</h2>
+            <form action="/login" method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                
+                <button type="submit" class="cta">Login</button>
+            </form>
+
+            <!-- Signup Link Added Here -->
+            <p>Don't have an account? <a href="signup.html" class="signup-link">Sign Up</a></p>
+        </section>
+    </main>
+    <footer>
+        <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+        <p>&copy; 2023 Black Bank. All rights reserved.</p>
+    </footer>
+</body>
+</html>
