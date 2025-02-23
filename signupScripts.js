@@ -69,13 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 const data = await response.json();
+                console.log("Server Response:", data); // Debugging
 
                 if (response.ok) {
                     successMessage.textContent = "✅ Signup successful! Redirecting...";
                     successMessage.style.color = "green";
 
                     setTimeout(() => {
-                        window.location.href = "login.html"; // Redirect to login page
+                        window.location.href = "https://awaken11.github.io/bank2/login.html"; // Fixed redirection
                     }, 2000);
                 } else {
                     successMessage.textContent = `❌ ${data.message}`;
