@@ -22,7 +22,7 @@
     <main>
         <section class="login">
             <h2>Create an Account</h2>
-            <form action="/signup" method="post" id="signupForm">
+            <form id="signupForm">  <!-- Removed action & method -->
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
                 <span class="error-message" id="usernameError"></span>
@@ -40,6 +40,7 @@
                 <span class="error-message" id="confirmPasswordError"></span>
 
                 <button type="submit" class="cta">Sign Up</button>
+                <p id="successMessage"></p> <!-- Added success/error message display -->
             </form>
             <p>Already have an account? <a href="login.html" class="signup-link">Login</a></p>
         </section>
