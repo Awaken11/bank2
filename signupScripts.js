@@ -2,9 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const signupForm = document.getElementById('signupForm');
 
     if (signupForm) {
-        signupForm.addEventListener('submit', function(event) {
-            let valid = true; // Flag to check if form is valid
+        signupForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
 
+            let valid = true; // Validation flag
+
+            // Input values
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
@@ -15,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const emailError = document.getElementById('emailError');
             const passwordError = document.getElementById('passwordError');
             const confirmPasswordError = document.getElementById('confirmPasswordError');
+            const successMessage = document.getElementById('successMessage');
 
             // Regex patterns for validation
             const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -25,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             emailError.textContent = "";
             passwordError.textContent = "";
             confirmPasswordError.textContent = "";
+            successMessage.textContent = "";
 
             // Validate Username
             if (username.length < 4) {
@@ -50,9 +55,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 valid = false;
             }
 
-            // Prevent form submission if any validation fails
+            // If validation fails, stop submission
             if (!valid) {
-                event.preventDefault();
+                return;
+            }
+
+            // Send Data to Backend API
+            try {
+                const response = await fetch("https://bank2-4wk0.onrender.com/signup", { // Replace with your actual backend URL
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    successMessage.textContent = "✅ Signup successful! Redirecting...";
+                    successMessage.style.color = "green";
+
+                    setTimeout(() => {
+                        window.location.href = "login.html"; // Redirect to login page
+                    }, 2000);
+                } else {
+                    successMessage.textContent = `❌ ${data.message}`;
+                    successMessage.style.color = "red";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                successMessage.textContent = "❌ Signup failed. Please try again.";
+                successMessage.style.color = "red";
             }
         });
     }
