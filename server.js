@@ -11,32 +11,61 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ✅ Debugging: Log Environment Variables
+// ✅ Validate Required Environment Variables
+const REQUIRED_ENV_VARS = ["DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME", "DB_PORT", "SECRET_KEY"];
+REQUIRED_ENV_VARS.forEach((key) => {
+    if (!process.env[key]) {
+        console.error(`❌ ERROR: Missing required environment variable: ${key}`);
+        process.exit(1); // Stop the server if critical variables are missing
+    }
+});
+
+// ✅ Debugging: Log Loaded Environment Variables
 console.log("🔹 Loaded Environment Variables:");
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_PASSWORD:", process.env.DB_PASSWORD ? "********" : "Not Found"); // Mask password for security
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD ? "********" : "Not Found"); // Mask password
 console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
-console.log("PORT:", process.env.PORT);
+console.log("PORT:", process.env.PORT || 5000);
 console.log("SECRET_KEY:", process.env.SECRET_KEY ? "Loaded Successfully" : "Not Found");
 
-// ✅ MySQL Database Connection
-const db = mysql.createConnection({
+// ✅ MySQL Database Connection with Auto-Retry
+const dbConfig = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT
-});
+    port: process.env.DB_PORT,
+    connectTimeout: 10000 // 10 seconds timeout
+};
 
-db.connect(err => {
-    if (err) {
-        console.error("❌ Database Connection Failed:", err);
-        return;
-    }
-    console.log("✅ Connected to MySQL Database");
-});
+function connectDatabase() {
+    const db = mysql.createConnection(dbConfig);
+
+    db.connect(err => {
+        if (err) {
+            console.error("❌ Database Connection Failed:", err.message);
+            console.log("🔄 Retrying in 5 seconds...");
+            setTimeout(connectDatabase, 5000); // Retry connection after 5 seconds
+        } else {
+            console.log("✅ Connected to MySQL Database");
+        }
+    });
+
+    // Handle MySQL disconnection
+    db.on("error", err => {
+        console.error("⚠️ MySQL Error:", err);
+        if (err.code === "PROTOCOL_CONNECTION_LOST") {
+            console.log("🔄 Reconnecting...");
+            connectDatabase(); // Reconnect on lost connection
+        }
+    });
+
+    return db;
+}
+
+const db = connectDatabase();
 
 // ✅ Secret Key for JWT Authentication
 const SECRET_KEY = process.env.SECRET_KEY;
