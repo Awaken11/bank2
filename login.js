@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
         loginForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const loginInput = document.getElementById("loginInput").value.trim();
+            const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
-            const submitButton = document.getElementById("loginButton");
+            const submitButton = document.querySelector("button[type='submit']");
 
             function clearError(inputId) {
                 const errorElement = document.getElementById(inputId + "Error");
@@ -25,12 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorElement.textContent = message;
             }
 
-            clearError("loginInput");
+            clearError("username");
             clearError("password");
 
-            const isEmail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(loginInput);
-            if (!isEmail && loginInput.length < 4) {
-                showError("loginInput", "Enter a valid email or username (min 4 characters).");
+            if (username.length < 4) {
+                showError("username", "Username must be at least 4 characters long.");
                 return;
             }
 
@@ -43,10 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
             submitButton.textContent = "Logging in...";
 
             try {
-                const response = await fetch("https://your-railway-app-url/login", {
+                const response = await fetch("https://yamanote.proxy.rlwy.net:43574/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ login: loginInput, password }),
+                    body: JSON.stringify({ username, password }),
                 });
 
                 const data = await response.json();
@@ -55,11 +54,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert("Login successful!");
                     window.location.href = "dashboard.html";
                 } else {
-                    showError("loginInput", data.message || "Invalid login credentials.");
+                    showError("username", data.message || "Invalid login credentials.");
                 }
             } catch (error) {
                 console.error("Login error:", error);
-                showError("loginInput", "Something went wrong. Try again later.");
+                showError("username", "Something went wrong. Try again later.");
             }
 
             submitButton.disabled = false;
