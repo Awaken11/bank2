@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loginForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim(); // Changed 'username' to 'email'
             const password = document.getElementById("password").value;
             const submitButton = document.querySelector("button[type='submit']");
 
@@ -25,11 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorElement.textContent = message;
             }
 
-            clearError("username");
+            clearError("email");
             clearError("password");
 
-            if (username.length < 4) {
-                showError("username", "Username must be at least 4 characters long.");
+            if (!email.includes("@")) {
+                showError("email", "Please enter a valid email.");
                 return;
             }
 
@@ -42,23 +42,24 @@ document.addEventListener("DOMContentLoaded", function () {
             submitButton.textContent = "Logging in...";
 
             try {
-                const response = await fetch("https://yamanote.proxy.rlwy.net:43574/login", {
+                const response = await fetch("https://bank2-4wk0.onrender.com/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password }),
+                    body: JSON.stringify({ email, password }),
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert("Login successful!");
-                    window.location.href = "dashboard.html";
+                    alert("✅ Login successful!");
+                    localStorage.setItem("authToken", data.token); // Store JWT token
+                    window.location.href = "dashboard.html"; // Redirect to dashboard
                 } else {
-                    showError("username", data.message || "Invalid login credentials.");
+                    showError("email", data.message || "❌ Invalid login credentials.");
                 }
             } catch (error) {
                 console.error("Login error:", error);
-                showError("username", "Something went wrong. Try again later.");
+                showError("email", "⚠️ Something went wrong. Try again later.");
             }
 
             submitButton.disabled = false;
