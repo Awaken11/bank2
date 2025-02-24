@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("✅ login.js Loaded");
 
     const loginForm = document.getElementById('loginForm');
-
+    
     if (!loginForm) {
         console.error("❌ loginForm not found!");
         return;
@@ -35,14 +35,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Store user data in localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
-                localStorage.setItem('credit', data.credit); // Store credit balance
+                localStorage.setItem('credit', data.credit);
+
+                console.log("✅ Stored in localStorage:");
+                console.log("Token:", localStorage.getItem('token'));
+                console.log("Username:", localStorage.getItem('username'));
+                console.log("Credit:", localStorage.getItem('credit'));
 
                 successMessage.textContent = "✅ Login successful! Redirecting...";
                 successMessage.style.color = "green";
 
                 setTimeout(() => {
-                    // ✅ Redirect to your hosted homepage
-                    window.location.href = "https://awaken11.github.io/bank2/index.html";
+                    if (localStorage.getItem('username')) {
+                        window.location.href = "https://awaken11.github.io/bank2/index.html";
+                    } else {
+                        console.error("❌ localStorage not set properly!");
+                        successMessage.textContent = "❌ Login failed. Please try again.";
+                        successMessage.style.color = "red";
+                    }
                 }, 2000);
             } else {
                 successMessage.textContent = `❌ ${data.message}`;
