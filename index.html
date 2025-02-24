@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">Black Bank</div>
+    <div class="logo">Black Bank</div>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -19,7 +19,14 @@
                 <li><a href="about.html">About Us</a></li>
             </ul>
         </nav>
-        <a href="login.html" class="login-btn">Login</a>
+        <div id="user-info">
+            <a href="login.html" class="login-btn" id="loginButton">Login</a>
+            <div id="userDetails" style="display: none;">
+                <span id="username"></span>
+                <p>Credit: <span id="userCredit">0</span></p>
+                <button id="logoutButton">Logout</button>
+            </div>
+        </div>
     </header>
     <main>
         <section class="hero">
