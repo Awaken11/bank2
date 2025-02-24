@@ -7,32 +7,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const userCreditSpan = document.getElementById("userCredit");
     const logoutButton = document.getElementById("logoutButton");
 
-    function updateUserInfo() {
-        const username = localStorage.getItem("username");
-        const credit = localStorage.getItem("credit");
+    console.log("🔍 Checking localStorage...");
+    console.log("Stored Username:", localStorage.getItem("username"));
+    console.log("Stored Credit:", localStorage.getItem("credit"));
 
-        if (username) {
-            // Hide login button, show user details
-            loginButton.style.display = "none"; 
-            userDetails.style.display = "block"; 
-            usernameSpan.textContent = username; 
-            userCreditSpan.textContent = credit ? credit : "0"; 
-        } else {
-            loginButton.style.display = "inline-block";
-            userDetails.style.display = "none";
-        }
+    const username = localStorage.getItem("username");
+    const credit = localStorage.getItem("credit");
+
+    if (username) {
+        loginButton.style.display = "none";
+        userDetails.style.display = "block";
+        usernameSpan.textContent = username;
+        userCreditSpan.textContent = credit ? credit : "0";
+    } else {
+        console.warn("❌ No user found in localStorage!");
+        loginButton.style.display = "block";
+        userDetails.style.display = "none";
     }
 
-    // ✅ Ensure user data is updated when the page loads
-    updateUserInfo();
-
-    // ✅ Handle logout
     logoutButton.addEventListener("click", function () {
+        console.log("🔹 Logging out...");
         localStorage.removeItem("username");
         localStorage.removeItem("credit");
         localStorage.removeItem("token");
-
-        // Refresh the page to reflect logout
         window.location.href = "index.html";
     });
 });
