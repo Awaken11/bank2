@@ -8,28 +8,28 @@ document.addEventListener("DOMContentLoaded", function () {
     const logoutButton = document.getElementById("logoutButton");
 
     console.log("🔍 Checking localStorage...");
-    console.log("Stored Username:", localStorage.getItem("username"));
-    console.log("Stored Credit:", localStorage.getItem("credit"));
-
     const username = localStorage.getItem("username");
-    const credit = localStorage.getItem("credit");
+    const credit = parseFloat(localStorage.getItem("credit")) || 0; // Ensuring credit is a number
 
     if (username) {
+        console.log(`✅ User logged in as: ${username}`);
         loginButton.style.display = "none";
         userDetails.style.display = "block";
         usernameSpan.textContent = username;
-        userCreditSpan.textContent = credit ? credit : "0";
+        userCreditSpan.textContent = credit;
     } else {
-        console.warn("❌ No user found in localStorage!");
+        console.warn("❌ No user found. Showing login button.");
         loginButton.style.display = "block";
         userDetails.style.display = "none";
     }
 
-    logoutButton.addEventListener("click", function () {
-        console.log("🔹 Logging out...");
-        localStorage.removeItem("username");
-        localStorage.removeItem("credit");
-        localStorage.removeItem("token");
-        window.location.href = "index.html";
-    });
+    if (logoutButton) {
+        logoutButton.addEventListener("click", function () {
+            console.log("🔹 Logging out...");
+            localStorage.removeItem("username");
+            localStorage.removeItem("credit");
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+        });
+    }
 });
