@@ -41,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 successMessage.style.color = "green";
 
                 setTimeout(() => {
-                    window.location.href = "index.html"; // Redirect to home page
+                    // Redirect to the hosted homepage
+                    window.location.href = "https://awaken11.github.io/bank2/index.html";
                 }, 2000);
             } else {
                 successMessage.textContent = `❌ ${data.message}`;
