@@ -1,52 +1,54 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("✅ login.js Loaded");
+
     const loginForm = document.getElementById('loginForm');
-    const loginButton = document.getElementById('loginButton');
 
-    const token = localStorage.getItem('token');
-    const username = localStorage.getItem('username');
-
-    if (token && username) {
-        loginButton.textContent = username;
-        loginButton.href = "account.html";
+    if (!loginForm) {
+        console.error("❌ loginForm not found!");
+        return;
     }
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function(event) {
-            event.preventDefault();  // ✅ Prevent form from submitting to frontend
+    loginForm.addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent default form submission
+        console.log("✅ Form submitted!");
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const successMessage = document.getElementById('successMessage');
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
 
-            try {
-                const response = await fetch("https://bank2-4wk0.onrender.com/login", {  // ✅ Correct backend URL
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password })
-                });
+        console.log("Email:", email, "Password:", password); // Debugging
 
-                const data = await response.json();
-                console.log("Server Response:", data);
+        const successMessage = document.getElementById('successMessage');
 
-                if (response.ok) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', data.username);
+        try {
+            const response = await fetch("https://bank2-4wk0.onrender.com/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
 
-                    successMessage.textContent = "✅ Login successful! Redirecting...";
-                    successMessage.style.color = "green";
+            console.log("✅ Fetch request sent!");
 
-                    setTimeout(() => {
-                        window.location.href = "account.html";
-                    }, 2000);
-                } else {
-                    successMessage.textContent = `❌ ${data.message}`;
-                    successMessage.style.color = "red";
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                successMessage.textContent = "❌ Login failed. Please try again.";
+            const data = await response.json();
+            console.log("🔹 Server Response:", data);
+
+            if (response.ok) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('username', data.username);
+
+                successMessage.textContent = "✅ Login successful! Redirecting...";
+                successMessage.style.color = "green";
+
+                setTimeout(() => {
+                    window.location.href = "account.html"; // Change this to your dashboard
+                }, 2000);
+            } else {
+                successMessage.textContent = `❌ ${data.message}`;
                 successMessage.style.color = "red";
             }
-        });
-    }
+        } catch (error) {
+            console.error("❌ Fetch error:", error);
+            successMessage.textContent = "❌ Login failed. Please try again.";
+            successMessage.style.color = "red";
+        }
+    });
 });
