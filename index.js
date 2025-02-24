@@ -3,9 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const loginButton = document.getElementById("loginButton");
     const userDetails = document.getElementById("userDetails");
-    const usernameSpan = document.getElementById("username");
-    const userCreditSpan = document.getElementById("userCredit");
-    const logoutButton = document.getElementById("logoutButton");
 
     console.log("🔍 Checking localStorage...");
     const username = localStorage.getItem("username");
@@ -15,21 +12,17 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`✅ User logged in as: ${username}`);
         loginButton.style.display = "none";
         userDetails.style.display = "block";
-        usernameSpan.textContent = username;
-        userCreditSpan.textContent = credit;
+
+        // Set userDetails to display as a button
+        userDetails.innerHTML = `<button id="accountButton">${username} ₹${credit}</button>`;
+
+        // Add event listener to redirect on click
+        document.getElementById("accountButton").addEventListener("click", function () {
+            window.location.href = "account.html";
+        });
     } else {
         console.warn("❌ No user found. Showing login button.");
         loginButton.style.display = "block";
         userDetails.style.display = "none";
-    }
-
-    if (logoutButton) {
-        logoutButton.addEventListener("click", function () {
-            console.log("🔹 Logging out...");
-            localStorage.removeItem("username");
-            localStorage.removeItem("credit");
-            localStorage.removeItem("token");
-            window.location.href = "index.html";
-        });
     }
 });
