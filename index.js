@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const credit = localStorage.getItem("credit");
 
         if (username) {
+            // Hide login button, show user details
             loginButton.style.display = "none"; 
             userDetails.style.display = "block"; 
             usernameSpan.textContent = username; 
@@ -22,9 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Ensure user data is updated when the page loads
+    // ✅ Ensure user data is updated when the page loads
     updateUserInfo();
 
+    // ✅ Handle logout
     logoutButton.addEventListener("click", function () {
         localStorage.removeItem("username");
         localStorage.removeItem("credit");
