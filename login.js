@@ -32,14 +32,16 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("🔹 Server Response:", data);
 
             if (response.ok) {
+                // Store user data in localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
+                localStorage.setItem('credit', data.credit); // Store credit balance
 
                 successMessage.textContent = "✅ Login successful! Redirecting...";
                 successMessage.style.color = "green";
 
                 setTimeout(() => {
-                    window.location.href = "account.html"; // Change this to your dashboard
+                    window.location.href = "index.html"; // Redirect to home page
                 }, 2000);
             } else {
                 successMessage.textContent = `❌ ${data.message}`;
